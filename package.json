@@ -1,0 +1,27 @@
+{
+  "name": "tinyconnect-backend",
+  "version": "0.0.1",
+  "description": "Communication backend for relaying serialport <> TCP for Tiny Mesh Cloud",
+  "main": "main.js",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "serialport": "^1.7.4"
+  },
+  "devDependencies": {
+    "q": "^1.4.1",
+    "serialport": "^1.7.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tinymesh/tinyconnect-backend.git"
+  },
+  "author": "Olav Frengstad",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/tinymesh/tinyconnect-backend/issues"
+  },
+  "homepage": "https://github.com/tinymesh/tinyconnect-backend#readme"
+}
