@@ -5,7 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "lodash": "^3.10.1",
-    "serialport": "^1.7.4"
+    "serialport": "^1.7.4",
+    "sockjs": "^0.3.15"
   },
   "devDependencies": {
     "q": "^1.4.1",
