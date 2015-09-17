@@ -5,6 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "lodash": "^3.10.1",
+    "send": "^0.13.0",
     "serialport": "^1.7.4",
     "sockjs": "^0.3.15"
   },
