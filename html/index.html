@@ -1,0 +1,247 @@
+<html>
+	<head>
+		<title>Loading | Tiny Connect</title>
+		<style type="text/css">
+			body, html {
+				height: 100%;
+			}
+
+			body {
+				background: #eee;
+				font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				margin: 0;
+			}
+
+			.container {
+				width: 400px;
+				height: 250px;
+
+				position: absolute;
+				top:0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+
+				margin: auto;
+			}
+
+			p {
+				padding: 5ex 0 0 121px;
+				clear: both;
+				color: #ccc;
+			}
+
+			#logo {
+				float: left;
+				margin-left: 50px;
+			}
+
+			#logo, #logo img {
+				width: 200px
+			}
+
+			.loader {
+				float: left;
+				width: 60px;
+				height: 60px;
+			}
+
+			.enter {
+				top: 0px;
+				opacity: 1;
+			}
+
+			.square {
+				background: #ddd;
+				width: 15px;
+				height: 15px;
+				float: left;
+				top: -10px;
+				margin-right: 5px;
+				margin-top: 5px;
+				position: relative;
+				opacity: 0;
+				-webkit-animation: enter 6s infinite;
+				animation: enter 6s infinite;
+			}
+
+			.square:nth-child(1) {
+				-webkit-animation-delay: 1.8s;
+				-moz-animation-delay: 1.8s;
+				animation-delay: 1.8s;
+			}
+
+			.square:nth-child(2) {
+				-webkit-animation-delay: 2.1s;
+				-moz-animation-delay: 2.1s;
+				animation-delay: 2.1s;
+			}
+
+			.square:nth-child(3) {
+				-webkit-animation-delay: 2.4s;
+				-moz-animation-delay: 2.4s;
+				animation-delay: 2.4s;
+			}
+
+			.square:nth-child(4) {
+				-webkit-animation-delay: 0.9s;
+				-moz-animation-delay: 0.9s;
+				animation-delay: 0.9s;
+			}
+
+			.square:nth-child(5) {
+				-webkit-animation-delay: 1.2s;
+				-moz-animation-delay: 1.2s;
+				animation-delay: 1.2s;
+			}
+
+			.square:nth-child(6) {
+				-webkit-animation-delay: 1.5s;
+				-moz-animation-delay: 1.5s;
+				animation-delay: 1.5s;
+			}
+
+			.square:nth-child(8) {
+				-webkit-animation-delay: 0.3s;
+				-moz-animation-delay: 0.3s;
+				animation-delay: 0.3s;
+			}
+
+			.square:nth-child(9) {
+				-webkit-animation-delay: 0.6s;
+				-moz-animation-delay: 0.6s;
+				animation-delay: 0.6s;
+			}
+
+			.clear {
+			clear: both;
+			}
+
+			.last {
+				margin-right: 0;
+			}
+
+			@-webkit-keyframes enter {
+				0% {
+						opacity: 0;
+						top: -10px;
+				}
+				5% {
+						opacity: 1;
+						top: 0px;
+				}
+				50.9% {
+						opacity: 1;
+						top: 0px;
+				}
+				55.9% {
+						opacity: 0;
+						top: 10px;
+				}
+			}
+			@keyframes enter {
+				0% {
+						opacity: 0;
+						top: -10px;
+				}
+				5% {
+						opacity: 1;
+						top: 0px;
+				}
+				50.9% {
+						opacity: 1;
+						top: 0px;
+				}
+				55.9% {
+						opacity: 0;
+						top: 10px;
+				}
+			}
+			@-moz-keyframes enter {
+				0% {
+						opacity: 0;
+						top: -10px;
+				}
+				5% {
+						opacity: 1;
+						top: 0px;
+				}
+				50.9% {
+						opacity: 1;
+						top: 0px;
+				}
+				55.9% {
+						opacity: 0;
+						top: 10px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="loader">
+				<div class="square" ></div>
+				<div class="square"></div>
+				<div class="square last"></div>
+				<div class="square clear"></div>
+				<div class="square"></div>
+				<div class="square last"></div>
+				<div class="square clear"></div>
+				<div class="square "></div>
+				<div class="square last"></div>
+			</div>
+
+			<div id="logo">
+				<img alt="Tiny Mesh AS" src="/images/branding.png" style="opacity: 0.2;"/>
+			</div>
+
+			<p id="status">
+				Loading Resources
+			</p>
+		</div>
+
+	<script type="text/javascript">
+		var load = function(release) {
+			window.location = '/app/' + release.release
+		}
+
+		var source = new EventSource('/events')
+
+		var releases
+
+		source.addEventListener('open', function(e) { console.log('open', e) })
+		source.addEventListener('error', function(e) { console.log('error', e) })
+		source.addEventListener('message', function(e) { console.log('message', e) })
+
+		source.addEventListener('load-error', function(e) {
+			console.log('failed to load', e.data)
+		})
+
+		source.addEventListener('state', function(e) {
+			try {
+				 releases = JSON.parse(e.data)
+			} catch(e) {
+				console.log('error: ' + e.toString())
+			}
+
+			var i, ready = [], errs = 0
+			for (i = 0; i < releases.length; i++) {
+				var release = releases[i]
+				if ('ready' === release.state)
+					ready.push(release)
+				else if ('error' === release.state)
+					errs++
+			}
+
+			// all release have been accounted for
+			if (ready.length + errs === releases.length) {
+				if (ready.length > 0)
+					load(ready.sort(function(a, b) { return a.release < b.release })[0])
+				else
+					noAvailableReleases()
+			}
+		})
+	</script>
+
+	</body>
+</html>

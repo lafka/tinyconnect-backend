@@ -1,0 +1,96 @@
+<html>
+	<head>
+		<title>Not Found | Tiny Connect</title>
+		<style type="text/css">
+			body, html {
+				height: 100%;
+			}
+
+			body {
+				background: #eee;
+				font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				margin: 0;
+				color: #aaa;
+			}
+
+			.large-x {
+				position: absolute;
+				top: -140px;
+				bottom: 0;
+				left: 10%;
+				line-height: 380px;
+				height: 380px;
+				width: 380px;
+				margin: auto 0;
+				font-size: 720px;
+				font-weight: bold;
+				color: #e7e7e7;
+			}
+
+			.container {
+				width: 600px;
+				height: 250px;
+
+				position: absolute;
+				top:0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+
+				margin: auto;
+				text-align: center;
+			}
+
+			a {
+				text-decoration: none;
+				color: #79b;
+				font-weight: bold;
+			}
+			a:after { content: " - " }
+			a:last-child:after { content: "" }
+			a:hover { text-decoration: underline; }
+
+			p {
+				clear: both;
+			}
+
+
+			#logo img {
+				width: 200px
+			}
+
+			h1 {
+				line-height: 60px;
+				font-size: 45px;
+				font-weight: 100;
+				margin: 0px 0 50px 0;
+				text-shadow: 0 1px 0 #fff;
+			}
+
+			p {
+				color: rgba(0, 0, 0, 0.5);
+				margin: 20px 0;
+				line-height: 1.6;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="large-x">x</div>
+		<div class="container">
+			<h1>Not Found</h1>
+
+			<p>
+				The page you where looking for was not found. The release might not be
+				complete or the URL you entered was wrong.
+			</p>
+			<div id="suggestions">
+				 <a href="/">Go to default frontend</a>
+				 <a href="https://docs.tiny-mesh.com">Tiny Mesh Docs</a>
+			</div>
+
+			<div id="logo">
+				<img alt="Tiny Mesh AS" src="/images/branding.png" style="opacity: 0.2;"/>
+			</div>
+		</div>
+	</body>
+</html>
