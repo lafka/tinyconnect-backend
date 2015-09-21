@@ -12,8 +12,9 @@ module.exports = {
 
     module: {
         loaders: [
-            {test: /\.jsx?$/,                   loader: 'babel', exclude: [/forge.bundle.js/, /node_modules/] },
-            {test: /\.js$/,                     loader: 'babel-loader', exclude: [/forge.bundle.js/, /node_modules/] },
+            {test: /\.jsx?$/, loader: 'babel', exclude: [/forge.bundle.js/, /node_modules/] },
+            {test: /\.js$/,   loader: 'babel-loader', exclude: [/forge.bundle.js/, /node_modules/] },
+            {test: /\.html$/, loader: 'file-loader?name=[path][name].[ext]' }
         ]
     },
 
