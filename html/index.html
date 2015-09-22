@@ -175,39 +175,267 @@
 						top: 10px;
 				}
 			}
+
+			#loader { display: block ; }
+			#error { display: none; }
+			.modal {
+			  position: fixed;
+			  top: 0;
+			  right: 0;
+			  bottom: 0;
+			  left: 0;
+			  z-index: 1040;
+			  overflow: auto;
+			  overflow-y: scroll;
+			}
+
+			.modal.fade .modal-dialog {
+			  -webkit-transform: translate(0, -25%);
+			      -ms-transform: translate(0, -25%);
+			          transform: translate(0, -25%);
+			  -webkit-transition: -webkit-transform 0.3s ease-out;
+			     -moz-transition: -moz-transform 0.3s ease-out;
+			       -o-transition: -o-transform 0.3s ease-out;
+			          transition: transform 0.3s ease-out;
+			}
+
+			.modal.in .modal-dialog {
+			  -webkit-transform: translate(0, 0);
+			      -ms-transform: translate(0, 0);
+			          transform: translate(0, 0);
+			}
+
+			.modal-dialog {
+			  z-index: 1050;
+			  width: auto;
+			  padding: 10px;
+			  margin-right: auto;
+			  margin-left: auto;
+			}
+
+			.modal-content {
+			  position: relative;
+			  background-color: #ffffff;
+			  border-radius: 6px;
+			  outline: none;
+			  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+			          box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+			  background-clip: padding-box;
+			}
+
+				.modal-content p {
+				  padding: 0;
+				}
+
+			.modal-backdrop {
+			  position: fixed;
+			  top: 0;
+			  right: 0;
+			  bottom: 0;
+			  left: 0;
+			  z-index: 1030;
+			  background-color: #000000;
+			}
+
+			.modal-backdrop.fade {
+			  opacity: 0;
+			  filter: alpha(opacity=0);
+			}
+
+			.modal-backdrop.in {
+			  opacity: 0.5;
+			  filter: alpha(opacity=50);
+			}
+
+			.modal-header {
+			  min-height: 16.428571429px;
+			  padding: 15px;
+			  border-bottom: 1px solid #e5e5e5;
+			}
+
+			.modal-header .close {
+			  margin-top: -2px;
+			}
+
+			.modal-title {
+			  margin: 0;
+			  line-height: 1.428571429;
+			}
+
+			.modal-body {
+			  position: relative;
+			  padding: 20px;
+			}
+
+			.modal-footer {
+			  padding: 19px 20px 20px;
+			  margin-top: 15px;
+			  text-align: right;
+			  border-top: 1px solid #e5e5e5;
+			}
+
+			.modal-footer:before,
+			.modal-footer:after {
+			  display: table;
+			  content: " ";
+			}
+
+			.modal-footer:after {
+			  clear: both;
+			}
+
+			.modal-footer:before,
+			.modal-footer:after {
+			  display: table;
+			  content: " ";
+			}
+
+			.modal-footer:after {
+			  clear: both;
+			}
+
+			.modal-footer .btn + .btn {
+			  margin-bottom: 0;
+			  margin-left: 5px;
+			}
+
+			.modal-footer .btn-group .btn + .btn {
+			  margin-left: -1px;
+			}
+
+			.modal-footer .btn-block + .btn-block {
+			  margin-left: 0;
+			}
+
+			@media screen and (min-width: 768px) {
+			  .modal-dialog {
+			    right: auto;
+			    left: 50%;
+			    width: 600px;
+			    padding-top: 30px;
+			    padding-bottom: 30px;
+			  }
+			  .modal-content {
+			    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			  }
+			}
+			/* Custom dialog/modal headers */
+
+			.dialog-header-error { background-color: #d2322d; }
+			.dialog-header-wait { background-color: #428bca; }
+			.dialog-header-notify { background-color: #eeeeee; }
+			.dialog-header-confirm { background-color: #333333; }
+			.dialog-header-error span, .dialog-header-error h4,
+			.dialog-header-wait span, .dialog-header-wait h4,
+			.dialog-header-confirm span, .dialog-header-confirm h4 { color: #ffffff; }
+
+			#vsns {
+				padding: 25px;
+			}
+
+			#vsns li {
+				color: #aaa;
+				list-style: none;
+				padding: 10px 15px 5px;
+				border-bottom: 1px dashed #eee;
+			}
+			#vsns li > .name { font-weight: bold; }
+			#vsns li > .state { font-weight: bold; }
 		</style>
 	</head>
 	<body>
 		<div class="container">
-			<div class="loader">
-				<div class="square" ></div>
-				<div class="square"></div>
-				<div class="square last"></div>
-				<div class="square clear"></div>
-				<div class="square"></div>
-				<div class="square last"></div>
-				<div class="square clear"></div>
-				<div class="square "></div>
-				<div class="square last"></div>
+			<div id="loader">
+				<div class="loader">
+					<div class="square" ></div>
+					<div class="square"></div>
+					<div class="square last"></div>
+					<div class="square clear"></div>
+					<div class="square"></div>
+					<div class="square last"></div>
+					<div class="square clear"></div>
+					<div class="square "></div>
+					<div class="square last"></div>
+				</div>
+
+				<div id="logo">
+					<img alt="Tiny Mesh AS" src="/images/branding.png" style="opacity: 0.2;"/>
+				</div>
+
+				<p id="status">
+					Loading Resources
+				</p>
 			</div>
 
-			<div id="logo">
-				<img alt="Tiny Mesh AS" src="/images/branding.png" style="opacity: 0.2;"/>
-			</div>
+			<div id="error">
+				<div class="modal">
+						<div class="modal" role="dialog" aria-labelledby="errorModalLabel">
+							<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header dialog-header-error">
+												<h4 class="modal-title text-danger">Error: No frontend available</h4>
+										</div>
+										<div class="modal-body text-danger">
+											<p>
+												We could not find any frontends available for your system.
+											</p>
 
-			<p id="status">
-				Loading Resources
-			</p>
+											<p>
+												<strong>This is the state of all your frontends:</strong><br />
+
+												<em id="hide-on-vsns">no available frontends</em>
+												<ul id="vsns" />
+											</p>
+										</div>
+									</div>
+							</div>
+						</div>
+			 </div>
+			</div>
 		</div>
 
+
 	<script type="text/javascript">
+		var releases
+
 		var load = function(release) {
 			window.location = '/app/' + release.release
 		}
 
-		var source = new EventSource('/events')
+		var noAvailableReleases = function() {
+			var
+				 loader = document.getElementById('loader'),
+				 error = document.getElementById('error'),
+				 versions = document.getElementById('vsns'),
+				 noversions = document.getElementById('hide-on-vsns')
 
-		var releases
+			loader.style.display = 'none'
+			error.style.display = 'block'
+
+			if (releases.length > 0) {
+				versions.style.display = 'block'
+				noversions.style.display = 'none'
+
+				while (versions.hasChildNodes()) {
+					versions.removeChild(versions.lastChild);
+				}
+
+				for (var i = 0; i < releases.length; i++) {
+					if ('ready' === releases[i].state)
+						continue
+
+					var li = document.createElement('li')
+					li.innerHTML = "<span class=\"name\">" + releases[i].release + "</span> &ndash; <span class=\"state state-" + releases[i].state + "\">" + releases[i].state + "</span>"
+					versions.appendChild(li)
+				}
+			} else {
+				versions.style.display = 'none'
+				noversions.style.display = 'inherit'
+			}
+		}
+
+		var source = new EventSource('/events')
 
 		source.addEventListener('open', function(e) { console.log('open', e) })
 		source.addEventListener('error', function(e) { console.log('error', e) })
