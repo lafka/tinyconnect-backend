@@ -400,7 +400,10 @@
 		var releases
 
 		var load = function(release) {
-			window.location = '/app/' + release.release
+			// silly race-condition 'avoidance'
+			setTimeout(function() {
+				window.location = '/app/' + release.release
+			}, 100)
 		}
 
 		var noAvailableReleases = function() {
@@ -465,7 +468,7 @@
 			if (ready.length + errs === releases.length) {
 				if (ready.length > 0)
 					load(ready.sort(function(a, b) { return a.release < b.release })[0])
-				else
+				else if(0 === releases.length)
 					noAvailableReleases()
 			}
 		})
