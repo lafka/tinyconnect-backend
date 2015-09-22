@@ -4,11 +4,18 @@
   "description": "Communication backend for relaying serialport <> TCP for Tiny Mesh Cloud",
   "main": "main.js",
   "dependencies": {
+    "github": "^0.2.4",
+    "gunzip-maybe": "^1.2.1",
     "lodash": "^3.10.1",
+    "mkdirp": "^0.5.1",
+    "node-forge": "^0.6.34",
     "open": "0.0.5",
+    "q": "^1.4.1",
+    "request": "^2.63.0",
     "send": "^0.13.0",
     "serialport": "^1.7.4",
     "sockjs": "^0.3.15",
+    "tar-fs": "^1.8.1",
     "yargs": "^3.25.0"
   },
   "devDependencies": {
@@ -16,7 +23,6 @@
     "babel-loader": "^5.3.2",
     "file-loader": "^0.8.4",
     "q": "^1.4.1",
-    "serialport": "^1.7.4",
     "sockjs-client": "^1.0.3",
     "webpack": "^1.12.1"
   },
