@@ -1,4 +1,5 @@
-var Crypto = require('../src/crypto.js')
+#!/usr/bin/env node
+var Crypto = require('../app/crypto.js')
 
 
 var server = new Crypto({id: 'server', state: 'init-keyex'})

@@ -1,0 +1,290 @@
+#!/usr/bin/env node
+
+// Build up a hierarchy of modules and the files used by entry points given
+// this can be used to strip away all the unused nonsense of a project.
+// Offcourse  there is no support for dynamic modules, webpack loaders, amd
+// crazyness etc....
+//
+//
+// KNOWN ISSUES:
+// * when multiple dependencies define the same dependency, magic may occur
+// * when requiring ./api/v3.0.0 -> ./api/v3.0.0/index.js should be included
+// * dynamic loading (ie `require(myDep)`) does not, and will never work
+
+const nativemodules = [
+  'assert',
+  'buffer',
+  'child_process',
+  'constants', // not native to node
+  'crypto',
+  'dgram',
+  'dns',
+  'events',
+  'fs',
+  'http',
+  'https',
+  'module',
+  'net',
+  'os',
+  'path',
+  'punycode',
+  'querystring',
+  'stream',
+  'tls',
+  'tty',
+  'url',
+  'util',
+  'vm',
+  'zlib',
+]
+
+var stripPath = function(p) {
+  if (!p)
+    return p
+  else {
+    var parts = p.split('/node_modules/')
+    parts[0] = "./" + path.basename(parts[0])
+    return (parts.join('/node_modules/'))
+  }
+}
+
+var
+  fs = require('fs'),
+  path = require('path'),
+  args = process.argv.slice(2),
+  parseImport,
+  parseFile,
+  parseModule,
+  modules = {},
+  tree = {}
+
+nativemodules.forEach(function(mod) {
+  tree[mod] = {
+    type: 'native',
+    name: mod,
+    paths: [], // native modueles don't have a path...
+    files: {},
+    modules: {}}
+})
+
+var findModule = function(file, lookup) {
+  file = path.dirname(file)
+
+  if ('/' === file)
+    return null
+
+  try {
+    fs.lstatSync(path.join(file, lookup || 'package.json'))
+    return {
+      type: 'module',
+      name: path.basename(path.resolve(file)),
+      paths: [path.resolve(file)],
+      files: {},
+      modules: {}
+    }
+  } catch(e) { }
+
+  return findModule(file, lookup)
+}
+
+
+parseImport = function(def, callback) {
+  var match = def.match(/from ['"](.*)['"]$/)
+
+  if (match[1].match(/^[^\/.]/))
+    callback('module', match[1])
+  else {
+    callback('file', match[1])
+  }
+}
+
+parseRequire = function(def, callback) {
+  var match = def.match(/require\(['"]([^'"]*)['"]\)/)
+
+  if (!match)
+    return
+
+  if (match[1].match(/^[\/.]/)) {
+    callback('file', match[1])
+  } else if(match[1].match('/')) {
+    var m = match[1].split('/')
+    // a file within a module
+    callback('module', m[0])
+    var mod = tree[m[0]]
+    parseFile(mod, './' + m.slice(1).join('/'), mod.paths[mod.paths.length - 1])
+  } else {
+    callback('module', match[1].split('/')[0])
+  }
+}
+
+var addEntry = function(k, mod, type, buf) {
+  switch (type) {
+    case "file":
+      parseFile(mod, buf, path.dirname(k))
+      mod.files[k].requires.push(path.resolve(path.dirname(k), buf))
+      break;
+
+    case "module":
+      if (!mod.modules[buf])
+        mod.modules[buf] = parseModule(buf, mod.paths[mod.paths.length - 1])
+
+      mod.files[k].modules.push(buf)
+      break
+  }
+}
+
+var expandFile = function(file) {
+  var
+    files,
+    basename
+
+  try {
+    files = fs.readdirSync(path.dirname(file)),
+    basename = path.basename(file)
+  } catch(e) {
+    return null
+  }
+
+  var isDir = false
+  try {
+    if (-1 != files.indexOf(basename) && !(isDir = fs.lstatSync(file).isDirectory()))
+      return file
+  } catch(e) { }
+
+  if (-1 !== files.indexOf(basename + '.js'))
+    file += '.js'
+  else if (-1 !== files.indexOf(basename + '.json'))
+    file += '.json'
+  else if (-1 !== files.indexOf(basename + '.node'))
+    file += '.node'
+  else if (isDir)
+    file = path.join(file, 'index.js')
+  else
+    return null
+
+  return file
+}
+
+// parse a file within a module
+parseFile = function(mod, file, cwd) {
+  if (!cwd) {
+    console.log("CWD must be set when parsing files") 
+    process.exit(1)
+  }
+
+  var kr = path.resolve(cwd, file)
+  var k = expandFile(kr)
+
+  if (null === k) {
+    throw new Error("can't require " + stripPath(kr))
+    process.exit(1)
+    return
+  }
+  var buf = fs.readFileSync(k).toString()
+
+  if (!mod.files[k])
+    mod.files[k] = {
+      type: 'file',
+      path: path.resolve(file),
+      requires: [],
+      modules: []
+    }
+  else
+    return
+
+
+  try {
+    var matches
+    if (matches = buf.match(/import.*from (.*)/g))
+      matches.forEach(function(def) {
+        parseImport(def, function(type, buf) { addEntry(k, mod, type, buf); })
+      })
+
+    if (matches = buf.match(/require\(['"].*['"]\)/g)) {
+      matches.forEach(function(def) {
+        parseRequire(def, function(type, buf) { addEntry(k, mod, type, buf); })
+      })
+    }
+  } catch(e) {
+    console.log('caught error in: ' + stripPath(k))
+
+    console.log(e.stack)
+    process.exit(1)
+  }
+}
+
+
+var parseModule = function(mod, base) {
+  var
+    dir = path.resolve(base, 'node_modules', mod),
+    file
+
+  // this willl find the nodemodules directory we are looking for
+  var lookup = findModule(dir, mod)
+  if (lookup)
+    dir = path.resolve(lookup.paths[0], mod)
+
+  file = path.join(dir, 'index.js')
+
+  // if the module exists with that path
+  if (tree[mod] && (
+     tree[mod].type === 'native' ||
+     (tree[mod].paths && -1 !== tree[mod].paths.indexOf(dir))))
+      return
+
+
+  try {
+    var json = JSON.parse(fs.readFileSync(path.join(dir, 'package.json')))
+    file = path.resolve(dir, !json.main || '.' === json.main ? 'index.js' : json.main)
+  } catch(e) {
+    // no package file
+  }
+
+
+  // check if the dir exists, otherwise try to nail out from existing modules
+  var isDir = false
+  try {
+    isDir = fs.lstatSync(dir).isDirectory()
+  } catch(e) {
+    // no such dir
+  }
+
+  if (!isDir && !tree[mod])
+    throw new Error("can't find module '" + mod + "', in path: " + dir)
+
+  if (!tree[mod])
+    tree[mod] = {
+      type: 'module',
+      name: mod,
+      paths: [],
+      files: {},
+      modules: {}
+    }
+
+
+  if (isDir) {
+    tree[mod].paths.push(dir)
+    parseFile(tree[mod], file, dir)
+  } else {
+    // not a directory, but the module exists so it's parsed already
+  }
+}
+
+args.forEach(function(file) {
+  var mod = findModule(file)
+
+  if (!tree[mod.name])
+    tree[mod.name] = mod
+
+  parseFile(tree[mod.name], file, path.dirname(__dirname))
+})
+
+for (var k in tree) {
+  tree[k].paths.forEach(function(p) {
+    console.log(path.join(p, 'package.json'))
+  })
+
+  for (var i in tree[k].files) {
+    console.log(i)
+  }
+}
