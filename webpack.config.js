@@ -19,7 +19,7 @@ module.exports = {
 
     resolve: {
       alias: {
-        'node-forge': '../src/forge.bundle.js'
+        'node-forge': '../app/forge.bundle.js'
       }
     },
 

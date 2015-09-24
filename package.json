@@ -1,6 +1,6 @@
 {
   "name": "tinyconnect-backend",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "Communication backend for relaying serialport <> TCP for Tiny Mesh Cloud",
   "main": "lib/main.js",
   "dependencies": {
@@ -8,15 +8,17 @@
     "github": "^0.2.4",
     "gunzip-maybe": "^1.2.1",
     "lodash": "^3.10.1",
+    "markup-js": "^1.5.21",
     "mkdirp": "^0.5.1",
+    "node-forge": "^0.6.34",
     "open": "0.0.5",
     "q": "^1.4.1",
     "request": "^2.63.0",
+    "semver": "^5.0.3",
+    "send": "^0.13.0",
     "serialport": "^1.7.4",
     "sockjs": "^0.3.15",
     "tar-fs": "^1.8.1",
-    "send": "^0.13.0",
-    "node-forge": "^0.6.34",
     "yargs": "^3.25.0"
   },
   "devDependencies": {

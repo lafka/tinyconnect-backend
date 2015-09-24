@@ -466,10 +466,11 @@
 
 			// all release have been accounted for
 			if (ready.length + errs === releases.length) {
-				if (ready.length > 0)
+				if (ready.length > 0) {
 					load(ready.sort(function(a, b) { return a.release < b.release })[0])
-				else if(0 === releases.length)
+				} else if(0 === releases.length) {
 					noAvailableReleases()
+				}
 			}
 		})
 	</script>

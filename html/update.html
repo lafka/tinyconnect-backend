@@ -1,0 +1,252 @@
+<html>
+	<head>
+		<title>Update Required | Tiny Connect</title>
+		<style type="text/css">
+			body, html {
+				height: 100%;
+			}
+
+			body {
+				background: #eee;
+				font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+				margin: 0;
+				color: #777;
+			}
+
+			.container {
+				width: 400px;
+				height: 250px;
+
+				position: absolute;
+				top:0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+
+				margin: auto;
+			}
+
+			p {
+				padding: 5ex 0 0 121px;
+				clear: both;
+			}
+
+			hr {
+				border-top: 1px solid #ddd;
+				border-bottom: 1px solid #fafafa;
+			}
+
+			#logo {
+				float: left;
+				margin-left: 50px;
+			}
+
+			#logo, #logo img {
+				width: 200px
+			}
+
+			#error { display: block; }
+			.modal {
+			  position: fixed;
+			  top: 0;
+			  right: 0;
+			  bottom: 0;
+			  left: 0;
+			  z-index: 1040;
+			  overflow: auto;
+			  overflow-y: scroll;
+			}
+
+			.modal.fade .modal-dialog {
+			  -webkit-transform: translate(0, -25%);
+			      -ms-transform: translate(0, -25%);
+			          transform: translate(0, -25%);
+			  -webkit-transition: -webkit-transform 0.3s ease-out;
+			     -moz-transition: -moz-transform 0.3s ease-out;
+			       -o-transition: -o-transform 0.3s ease-out;
+			          transition: transform 0.3s ease-out;
+			}
+
+			.modal.in .modal-dialog {
+			  -webkit-transform: translate(0, 0);
+			      -ms-transform: translate(0, 0);
+			          transform: translate(0, 0);
+			}
+
+			.modal-dialog {
+			  z-index: 1050;
+			  width: auto;
+			  padding: 10px;
+			  margin-right: auto;
+			  margin-left: auto;
+			}
+
+			.modal-content {
+			  position: relative;
+			  background-color: #ffffff;
+			  border-radius: 6px;
+			  outline: none;
+			  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+			          box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+			  background-clip: padding-box;
+			}
+
+				.modal-content p {
+				  padding: 0;
+				}
+
+			.modal-backdrop {
+			  position: fixed;
+			  top: 0;
+			  right: 0;
+			  bottom: 0;
+			  left: 0;
+			  z-index: 1030;
+			  background-color: #000000;
+			}
+
+			.modal-backdrop.fade {
+			  opacity: 0;
+			  filter: alpha(opacity=0);
+			}
+
+			.modal-backdrop.in {
+			  opacity: 0.5;
+			  filter: alpha(opacity=50);
+			}
+
+			.modal-header {
+			  min-height: 16.428571429px;
+			  padding: 15px;
+			  border-bottom: 1px solid #e5e5e5;
+			}
+
+			.modal-header .close {
+			  margin-top: -2px;
+			}
+
+			.modal-title {
+			  margin: 0;
+			  line-height: 1.428571429;
+			}
+
+			.modal-body {
+			  position: relative;
+			  padding: 20px;
+			}
+
+			.modal-footer {
+			  padding: 19px 20px 20px;
+			  margin-top: 15px;
+			  text-align: right;
+			  border-top: 1px solid #e5e5e5;
+			}
+
+			.modal-footer:before,
+			.modal-footer:after {
+			  display: table;
+			  content: " ";
+			}
+
+			.modal-footer:after {
+			  clear: both;
+			}
+
+			.modal-footer:before,
+			.modal-footer:after {
+			  display: table;
+			  content: " ";
+			}
+
+			.modal-footer:after {
+			  clear: both;
+			}
+
+			.modal-footer .btn + .btn {
+			  margin-bottom: 0;
+			  margin-left: 5px;
+			}
+
+			.modal-footer .btn-group .btn + .btn {
+			  margin-left: -1px;
+			}
+
+			.modal-footer .btn-block + .btn-block {
+			  margin-left: 0;
+			}
+
+			@media screen and (min-width: 768px) {
+			  .modal-dialog {
+			    right: auto;
+			    left: 50%;
+			    width: 600px;
+			    padding-top: 30px;
+			    padding-bottom: 30px;
+			  }
+			  .modal-content {
+			    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+			  }
+			}
+			/* Custom dialog/modal headers */
+
+			.dialog-header-error { background-color: #d2322d; }
+			.dialog-header-wait { background-color: #428bca; }
+			.dialog-header-notify { background-color: #eeeeee; }
+			.dialog-header-confirm { background-color: #333333; }
+			.dialog-header-error span, .dialog-header-error h4,
+			.dialog-header-wait span, .dialog-header-wait h4,
+			.dialog-header-confirm span, .dialog-header-confirm h4 { color: #ffffff; }
+
+			a {
+				text-decoration: none;
+				color: white;
+				font-weight: bold;
+				display: inline-block;
+				background: #5c99d2;
+				padding: 10px 25px;
+				text-transform: capitalize;
+			}
+			a:hover {
+				text-decoration: underline;
+				background: #4b88c1;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div id="error">
+				<div class="modal">
+						<div class="modal" role="dialog" aria-labelledby="errorModalLabel">
+							<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header dialog-header-confirm">
+												<h4 class="modal-title text-danger">Update Required</h4>
+										</div>
+										<div class="modal-body text-danger">
+											<p>
+												There is a new update you are required to download.
+											</p>
+
+											<hr/>
+
+											<h4>Release: {{release.release}}</h4>
+
+											<div>
+												{{release.body}}
+											</div>
+											<div style="clear:both; padding: 15px 0;" class="down-links">
+												{{release.assets}}
+													<a href={{url}}>Download {{name}}</a>
+												{{/release.assets}}
+											</div>
+										</div>
+									</div>
+							</div>
+						</div>
+			 </div>
+			</div>
+		</div>
+	</body>
+</html>
