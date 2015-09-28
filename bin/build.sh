@@ -240,6 +240,8 @@ pack_7zSFX() {
 
 	mkdir "%APPDIR%\\node"
 	mkdir "%APPDIR%\\app"
+	mkdir "%APPDIR%\\node\\$nodevsn"
+	mkdir "%APPDIR%\\app\\$vsn"
 
 	xcopy "node\\$nodevsn" "%APPDIR%\\node\\$nodevsn" /E /C /Y
 	xcopy "app\\$vsn" "%APPDIR%\\app\\$vsn" /E /C /Y
