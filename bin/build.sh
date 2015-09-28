@@ -241,8 +241,8 @@ pack_7zSFX() {
 	mkdir "%APPDIR%\\node"
 	mkdir "%APPDIR%\\app"
 
-	move "node\\$nodevsn" "%APPDIR%\\node\\$nodevsn"
-	move "app\\$vsn" "%APPDIR%\\app\\$vsn"
+	xcopy "node\\$nodevsn" "%APPDIR%\\node\\$nodevsn" /E /C /Y
+	xcopy "app\\$vsn" "%APPDIR%\\app\\$vsn" /E /C /Y
 
 	set SCRIPT="%TEMP%\\tinyconnect-$vsn-%RANDOM%-%RANDOM%-%RANDOM%-%RANDOM%-%RANDOM%.vbs"
 
@@ -259,6 +259,7 @@ pack_7zSFX() {
 	cscript /nologo %SCRIPT%
 
 	del %SCRIPT%
+
 	EOF
 
 	cat > "$distdir/$vsn.config" <<-EOF
@@ -267,6 +268,7 @@ pack_7zSFX() {
 	BeginPrompt="Do you want to install Tiny Connect $vsn from Tiny Mesh AS?"
 	RunProgram="setup-$vsn.bat"
 	;!@InstallEnd@!
+
 	EOF
 
 	rm -f "$target.7z" "$target"
