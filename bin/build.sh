@@ -187,7 +187,7 @@ build() {
 
 	striplist=$PWD/bin/striplist
 	( cd "$workdir"; (
-		find "$workdir/node" -type f -name node -or -name '*.so';
+		find "$workdir/node" -type f -name 'node' -or -name 'node.*' -or -name '*.so';
 		find "$workdir/app/$vsn/dist";
 		find "$workdir/app/$vsn/node_modules" -type f -name '*.node' -or -name 'routes.json' -or -name 'xdg-open';
 		find "$workdir/app/$vsn/node_modules" -type f -wholename '*/api/v*/*.js';
